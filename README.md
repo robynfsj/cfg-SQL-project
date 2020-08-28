@@ -1,7 +1,7 @@
 # CFG SQL Course Project
 
 ## Code First Girls: Introduction to Data Science and SQL Programming Course
-I undertook the Introduction to Data Science and SQL Programming course run by Code First Girls during summer 2020. It is an 8 week introductory course and was my first experience of databases and SQL. The course covered:
+I undertook the Introduction to Data Science and SQL Programming course run by Code First Girls during summer 2020. It is an 8 week introductory course and was my first experience of databases and SQL. We used MySQL throughout the course and covered:
 
 • database creation, structure and management  
 • basic queries  
