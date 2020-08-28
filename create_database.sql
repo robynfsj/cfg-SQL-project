@@ -7,81 +7,81 @@ USE retreat;
 
 -- Customer data tables.
 CREATE TABLE customer_addresses(
-	add_id INT NOT NULL AUTO_INCREMENT, 
-	line1 VARCHAR(50) NOT NULL, 
-	line2 VARCHAR(50), 
-	town VARCHAR(50), 
-	county VARCHAR(50), 
-	p_code VARCHAR(10) NOT NULL, 
-	CONSTRAINT pk_cust_add PRIMARY KEY (add_id)
+    add_id INT NOT NULL AUTO_INCREMENT, 
+    line1 VARCHAR(50) NOT NULL, 
+    line2 VARCHAR(50), 
+    town VARCHAR(50), 
+    county VARCHAR(50), 
+    p_code VARCHAR(10) NOT NULL, 
+    CONSTRAINT pk_cust_add PRIMARY KEY (add_id)
 );
 
 CREATE TABLE customers(
-	cust_id INT NOT NULL AUTO_INCREMENT, 
-	f_name VARCHAR(25), 
-	l_name VARCHAR(25), 
-	email VARCHAR(100), 
-	phone VARCHAR(20), 
-	add_id INT, 
-	CONSTRAINT pk_customers PRIMARY KEY (cust_id), 
-	FOREIGN KEY (add_id) REFERENCES customer_addresses(add_id)
+    cust_id INT NOT NULL AUTO_INCREMENT, 
+    f_name VARCHAR(25), 
+    l_name VARCHAR(25), 
+    email VARCHAR(100), 
+    phone VARCHAR(20), 
+    add_id INT, 
+    CONSTRAINT pk_customers PRIMARY KEY (cust_id), 
+    FOREIGN KEY (add_id) REFERENCES customer_addresses(add_id)
 );
 
 -- Tables about the retreat itself.
 CREATE TABLE cabins(
-	cab_id INT NOT NULL AUTO_INCREMENT, 
-	cabin_name VARCHAR(30), 
-	night_rate INT, 
-	CONSTRAINT pk_cabins PRIMARY KEY (cab_id)
+    cab_id INT NOT NULL AUTO_INCREMENT, 
+    cabin_name VARCHAR(30), 
+    night_rate INT, 
+    CONSTRAINT pk_cabins PRIMARY KEY (cab_id)
 );
 
 CREATE TABLE cabin_facilities(
-	cab_id INT NOT NULL AUTO_INCREMENT, 
-	capacity INT(2), 
-	hot_tub BOOL, 
-	lake_view BOOL, 
-	forest_view BOOL, 
-	CONSTRAINT pk_cab_fac PRIMARY KEY (cab_id), 
-	FOREIGN KEY (cab_id) REFERENCES cabins(cab_id)
+    cab_id INT NOT NULL AUTO_INCREMENT, 
+    capacity INT(2), 
+    hot_tub BOOL, 
+    lake_view BOOL, 
+    forest_view BOOL, 
+    CONSTRAINT pk_cab_fac PRIMARY KEY (cab_id), 
+    FOREIGN KEY (cab_id) REFERENCES cabins(cab_id)
 );
 
 CREATE TABLE extras(
-	ex_id INT NOT NULL AUTO_INCREMENT, 
-	item VARCHAR(30) NOT NULL, 
-	price DECIMAL(4, 2), 
-	CONSTRAINT pk_extras PRIMARY KEY (ex_id)
+    ex_id INT NOT NULL AUTO_INCREMENT, 
+    item VARCHAR(30) NOT NULL, 
+    price DECIMAL(4, 2), 
+    CONSTRAINT pk_extras PRIMARY KEY (ex_id)
 );
 
 -- Tables about bookings.
 CREATE TABLE bookings(
-	bk_id INT NOT NULL AUTO_INCREMENT, 
-	date_booked DATE, 
-	cust_id INT, 
-	CONSTRAINT pk_bookings PRIMARY KEY (bk_id), 
-	FOREIGN KEY (cust_id) REFERENCES customers(cust_id)
+    bk_id INT NOT NULL AUTO_INCREMENT, 
+    date_booked DATE, 
+    cust_id INT, 
+    CONSTRAINT pk_bookings PRIMARY KEY (bk_id), 
+    FOREIGN KEY (cust_id) REFERENCES customers(cust_id)
 );
- 
+
 CREATE TABLE cabins_booked(
-	cab_bk_id INT NOT NULL AUTO_INCREMENT, 
-	cab_id INT NOT NULL, 
-	chk_in DATE NOT NULL, 
-	chk_out DATE NOT NULL, 
+    cab_bk_id INT NOT NULL AUTO_INCREMENT, 
+    cab_id INT NOT NULL, 
+    chk_in DATE NOT NULL, 
+    chk_out DATE NOT NULL, 
     nights INT,
-	bk_id INT NOT NULL, 
-	CONSTRAINT pk_cab_bk PRIMARY KEY (cab_bk_id), 
-	FOREIGN KEY (cab_id) REFERENCES cabins(cab_id), 
-	FOREIGN KEY (bk_id) REFERENCES bookings(bk_id)
+    bk_id INT NOT NULL, 
+    CONSTRAINT pk_cab_bk PRIMARY KEY (cab_bk_id), 
+    FOREIGN KEY (cab_id) REFERENCES cabins(cab_id), 
+    FOREIGN KEY (bk_id) REFERENCES bookings(bk_id)
 );
 
 CREATE TABLE extras_booked(
-	ex_bk_id INT NOT NULL AUTO_INCREMENT, 
-	ex_id INT NOT NULL, 
-	date_of_activity DATE, 
-	quantity INT(2) NOT NULL, 
-	bk_id INT, 
-	CONSTRAINT pk_ex_bk PRIMARY KEY (ex_bk_id), 
-	FOREIGN KEY (ex_id) REFERENCES extras(ex_id), 
-	FOREIGN KEY (bk_id) REFERENCES bookings(bk_id)
+    ex_bk_id INT NOT NULL AUTO_INCREMENT, 
+    ex_id INT NOT NULL, 
+    date_of_activity DATE, 
+    quantity INT(2) NOT NULL, 
+    bk_id INT, 
+    CONSTRAINT pk_ex_bk PRIMARY KEY (ex_bk_id), 
+    FOREIGN KEY (ex_id) REFERENCES extras(ex_id), 
+    FOREIGN KEY (bk_id) REFERENCES bookings(bk_id)
 );
 
 
