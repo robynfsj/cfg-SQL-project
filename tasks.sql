@@ -39,14 +39,14 @@ CREATE VIEW contact_details AS
 	SELECT
 		c.cust_id AS customer_id,
 		c.f_name AS first_name,
-        c.l_name AS last_name,
-        c.email AS email,
-        c.phone AS phone,
-        a.line1 AS address_line1,
-        a.line2 AS address_line2,
-        a.town AS town,
-        a.county AS county,
-        a.p_code AS postcode
+		c.l_name AS last_name,
+		c.email AS email,
+		c.phone AS phone,
+		a.line1 AS address_line1,
+		a.line2 AS address_line2,
+		a.town AS town,
+		a.county AS county,
+		a.p_code AS postcode
 	FROM
 		customers AS c
 	LEFT JOIN
@@ -67,18 +67,18 @@ SELECT * FROM contact_details;
 CREATE VIEW cabin_details AS
 	SELECT
 		c.cab_id,
-        c.cabin_name, 
-        c.night_rate, 
-        f.capacity,
-        f.hot_tub,
-        f.lake_view,
-        f.forest_view
+		c.cabin_name, 
+		c.night_rate, 
+		f.capacity,
+		f.hot_tub,
+		f.lake_view,
+		f.forest_view
 	FROM
 		cabins AS c
 	INNER JOIN
 		cabin_facilities AS f
-        ON c.cab_id = f.cab_id;
-        
+		ON c.cab_id = f.cab_id;
+
 SELECT * FROM cabin_details;
 
 
@@ -89,32 +89,32 @@ SELECT * FROM cabin_details;
 CREATE VIEW cabins_booked_details AS
 	SELECT
 		cab_bk.cab_bk_id AS cabin_booking_id,
-        c.f_name,
-        c.l_name,
-        c.phone,
+		c.f_name,
+		c.l_name,
+		c.phone,
 		cd.cab_id,
-        cd.cabin_name,
-        cd.capacity,
-        cd.hot_tub,
-        cd.lake_view,
-        cd.forest_view,
-        cab_bk.chk_in,
-        cab_bk.chk_out,
-        cab_bk.nights AS nights,
-        cd.night_rate,
-        cab_bk.nights * cd.night_rate AS total_price,
-        cab_bk.bk_id
+		cd.cabin_name,
+		cd.capacity,
+		cd.hot_tub,
+		cd.lake_view,
+		cd.forest_view,
+		cab_bk.chk_in,
+		cab_bk.chk_out,
+		cab_bk.nights AS nights,
+		cd.night_rate,
+		cab_bk.nights * cd.night_rate AS total_price,
+		cab_bk.bk_id
 	FROM
 		cabins_booked AS cab_bk
 	INNER JOIN
 		cabin_details AS cd
-        ON cd.cab_id = cab_bk.cab_id
+		ON cd.cab_id = cab_bk.cab_id
 	INNER JOIN
 		bookings AS b
-        ON b.bk_id = cab_bk.bk_id
+		ON b.bk_id = cab_bk.bk_id
 	INNER JOIN
 		customers AS c
-        ON c.cust_id = b.cust_id
+		ON c.cust_id = b.cust_id
 	ORDER BY
 		cab_bk_id;
 
@@ -129,30 +129,30 @@ SELECT * FROM cabins_booked_details;
 CREATE VIEW extras_booked_details AS
 	SELECT
 		ex_bk_id AS extra_booking_id,
-        c.f_name,
-        c.l_name,
-        c.phone,
+		c.f_name,
+		c.l_name,
+		c.phone,
 		e.ex_id,
-        e.item,
+		e.item,
 		ex_bk.date_of_activity,
-        ex_bk.quantity,
+		ex_bk.quantity,
 		e.price AS activity_price,
-        e.price * ex_bk.quantity AS total_price,
-        ex_bk.bk_id
+		e.price * ex_bk.quantity AS total_price,
+		ex_bk.bk_id
 	FROM
 		extras AS e
 	INNER JOIN
 		extras_booked AS ex_bk
-        ON e.ex_id = ex_bk.ex_id
+		ON e.ex_id = ex_bk.ex_id
 	INNER JOIN
 		bookings AS b
-        ON b.bk_id = ex_bk.bk_id
+		ON b.bk_id = ex_bk.bk_id
 	INNER JOIN
 		customers AS c
-        ON c.cust_id = b.cust_id
+		ON c.cust_id = b.cust_id
 	ORDER BY
 		extra_booking_id;
-        
+
 SELECT * FROM extras_booked_details;
 
 
@@ -195,7 +195,7 @@ CREATE VIEW cost_of_holiday AS
 		cabin_total AS ct
 	LEFT JOIN
 		extras_total AS et
-        ON ct.bk_id = et.bk_id
+		ON ct.bk_id = et.bk_id
 	GROUP BY
 		ct.bk_id;
 
@@ -221,17 +221,18 @@ RETURNS DECIMAL(7,2)
 DETERMINISTIC
 BEGIN
 	DECLARE output_amount DECIMAL(7,2);
-    SET output_amount = input_amount - 5 / 100 * input_amount;
-    RETURN output_amount;
+	SET output_amount = input_amount - 5 / 100 * input_amount;
+	RETURN output_amount;
 END//
 DELIMITER ;
 
 -- Example:
 SELECT
 	cst.bk_id,
-    cst.holiday_total,
+	cst.holiday_total,
 	discounted_price(cst.holiday_total) AS total_after_discount
-FROM cost_of_holiday AS cst;
+FROM 
+	cost_of_holiday AS cst;
 
 
 
@@ -244,7 +245,7 @@ FROM cost_of_holiday AS cst;
 -- SCENARIO 1:
 -- Patricia Vaughn has phoned up to check if the cabin she has booked has a hot tub.
 -- To find this information out, we can use the following query.
- 
+
 SELECT f.hot_tub
 FROM cabin_facilities AS f
 WHERE cab_id IN(
@@ -276,15 +277,15 @@ SELECT a.county
 FROM customer_addresses AS a
 WHERE add_id IN(
 	SELECT c.add_id
-    FROM customers AS c
-    WHERE cust_id IN(
+	FROM customers AS c
+	WHERE cust_id IN(
 		SELECT b.cust_id
-        FROM bookings AS b
-        WHERE bk_id IN(
+		FROM bookings AS b
+			WHERE bk_id IN(
 			SELECT cab_bk.bk_id
-            FROM cabins_booked AS cab_bk
-            WHERE month(cab_bk.chk_in) = 07
-            )
+			FROM cabins_booked AS cab_bk
+			WHERE month(cab_bk.chk_in) = 07
+			)
 		)
 	)
 GROUP BY a.county
@@ -304,61 +305,49 @@ GROUP BY a.county
 -- morning in order to have them ready for when the customers arrive.
 
 DELIMITER //
-CREATE PROCEDURE bikes_needed(
-	on_date DATE
-)
+CREATE PROCEDURE bikes_needed(on_date DATE)
 BEGIN
-    SELECT 
+	SELECT 
 		SUM(ex_bk.quantity) AS total_bikes_required
 	FROM 
 		extras_booked AS ex_bk
-    WHERE ex_id IN (
+	WHERE ex_id IN (
 		SELECT e.ex_id
-        FROM extras AS e
-        WHERE e.item = 'bicycle hire')
-	AND ex_bk.date_of_activity = on_date;
+		FROM extras AS e
+		WHERE e.item = 'bicycle hire')
+		AND ex_bk.date_of_activity = on_date;
 END//
 DELIMITER ;
 
-
-
 DELIMITER //
-CREATE PROCEDURE kayaks_needed(
-	on_date DATE
-)
+CREATE PROCEDURE kayaks_needed(on_date DATE)
 BEGIN
-    SELECT 
+	SELECT 
 		SUM(ex_bk.quantity) AS total_kayaks_required
 	FROM 
 		extras_booked AS ex_bk
-    WHERE ex_id IN (
+	WHERE ex_id IN (
 		SELECT e.ex_id
-        FROM extras AS e
-        WHERE e.item = 'kayak hire')
-	AND ex_bk.date_of_activity = on_date;
+		FROM extras AS e
+		WHERE e.item = 'kayak hire')
+		AND ex_bk.date_of_activity = on_date;
 END//
 DELIMITER ;
 
-
-
 DELIMITER //
-CREATE PROCEDURE sups_needed(
-	on_date DATE
-)
+CREATE PROCEDURE sups_needed(on_date DATE)
 BEGIN
-    SELECT 
+	SELECT 
 		SUM(ex_bk.quantity) AS total_sups_required
 	FROM 
 		extras_booked AS ex_bk
-    WHERE ex_id IN (
+	WHERE ex_id IN (
 		SELECT e.ex_id
-        FROM extras AS e
-        WHERE e.item = 'sup hire')
-	AND ex_bk.date_of_activity = on_date;
+		FROM extras AS e
+		WHERE e.item = 'sup hire')
+		AND ex_bk.date_of_activity = on_date;
 END//
 DELIMITER ;
-
-
 
 -- Examples:
 CALL bikes_needed('2020-07-18');
@@ -371,9 +360,7 @@ CALL sups_needed('2020-07-22');
 -- Find all bookings that are checking in today.
 
 DELIMITER //
-CREATE PROCEDURE checking_in(
-	check_in_date DATE
-)
+CREATE PROCEDURE checking_in(check_in_date DATE)
 BEGIN
 	SELECT
 		cbd.f_name AS first_name,
@@ -398,9 +385,7 @@ CALL checking_in('2020-07-03');
 -- Find out who is checking out today so I know where to send housekeeping.
 
 DELIMITER //
-CREATE PROCEDURE checking_out(
-	check_out_date DATE
-)
+CREATE PROCEDURE checking_out(check_out_date DATE)
 BEGIN
 	SELECT
 		cbd.f_name AS first_name,
@@ -437,7 +422,7 @@ CREATE TRIGGER nights
 BEFORE INSERT ON cabins_booked
 FOR EACH ROW
 BEGIN
-    SET new.nights = DATEDIFF(new.chk_out, new.chk_in);
+	SET new.nights = DATEDIFF(new.chk_out, new.chk_in);
 END//
 DELIMITER ;
 
@@ -459,7 +444,7 @@ SELECT * FROM cabins_booked;
 ---------------------------------------------------------------------------------------
 
 -- I have already created such views above. I will use one of them to query.
-    
+
 -- SCENARIO:
 -- My yoga teacher has decided to go travelling in August. I want to find out who has 
 -- booked a yoga class in August and phone them up to let them know I have to cancel.
@@ -468,15 +453,15 @@ SELECT * FROM extras_booked_details;
 
 SELECT DISTINCT
 	eb.f_name AS first_name,
-    eb.l_name AS last_name,
-    eb.phone
+	eb.l_name AS last_name,
+	eb.phone
 FROM
 	extras_booked_details AS eb
 WHERE
 	item LIKE 'yoga%'
-AND
+	AND
 	month(date_of_activity) = 08;
-    
+
 -- There are three customers who are going to be very dissappointed - Darryl, Deanna
 -- and Hayfa.
 
@@ -499,19 +484,19 @@ WHERE cab_id = 11;
 
 SELECT
 	cd.cab_id,
-    cd.cabin_name,
-    cd.capacity,
-    cd.hot_tub,
-    cd.lake_view,
-    cd.forest_view
+	cd.cabin_name,
+	cd.capacity,
+	cd.hot_tub,
+	cd.lake_view,
+	cd.forest_view
 FROM 
 	cabins_booked_details AS cd
 GROUP BY 
 	cd.cab_id
 HAVING
 	cd.capacity >= 4
-    AND
-    cab_id <> 11;
+	AND
+	cab_id <> 11;
 
 
 
@@ -522,9 +507,9 @@ HAVING
 
 SELECT 
 	cd.cab_id AS cabin_id,
-    cd.cabin_name,
-    cd.hot_tub,
-    COUNT(cd.cab_id)
+	cd.cabin_name,
+	cd.hot_tub,
+	COUNT(cd.cab_id)
 FROM 
 	cabins_booked_details AS cd
 GROUP BY
@@ -542,8 +527,8 @@ ORDER BY
 
 SELECT DISTINCT
 	cbd.cab_id AS cabin_id,
-    cbd.cabin_name ,
-    cbd.chk_in
+	cbd.cabin_name ,
+	cbd.chk_in
 FROM
 	cabins_booked_details AS cbd
 GROUP BY
@@ -551,4 +536,4 @@ GROUP BY
 HAVING
 	month(cbd.chk_in) = 07
 ORDER BY
-    cbd.chk_in;
+	cbd.chk_in;
