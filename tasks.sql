@@ -462,7 +462,7 @@ WHERE
 	AND
 	month(date_of_activity) = 08;
 
--- There are three customers who are going to be very dissappointed - Darryl, Deanna
+-- There are three customers who are going to be very disappointed - Darryl, Deanna
 -- and Hayfa.
 
 
